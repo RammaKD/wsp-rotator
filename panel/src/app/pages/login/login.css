@@ -1,0 +1,121 @@
+* {
+  box-sizing: border-box;
+}
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a2a3a 0%, #0d1520 100%);
+  padding: 16px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.login-card {
+  background: var(--panel-surface);
+  border-radius: 16px;
+  padding: 40px 32px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.login-card h2 {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  color: #e8edf2;
+  text-align: center;
+}
+
+.subtitle {
+  margin: 0 0 28px 0;
+  text-align: center;
+  color: #a9b7c5;
+  font-size: 14px;
+}
+
+.campo {
+  margin-bottom: 18px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #d5dde5;
+}
+
+.campo input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #2a4059;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #14202e;
+  color: #e8edf2;
+  transition: border-color 0.2s;
+}
+
+.campo input::placeholder {
+  color: #7f93a8;
+}
+
+.campo input:focus {
+  outline: none;
+  border-color: #25d366;
+}
+
+.campo input:disabled {
+  background: #1a2a3a;
+}
+
+.error {
+  background: #fdecea;
+  color: #c0392b;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background: #1eb856;
+}
+
+button:disabled {
+  background: #a8dfc0;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

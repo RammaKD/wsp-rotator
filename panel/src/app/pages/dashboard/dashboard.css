@@ -1,0 +1,271 @@
+* {
+  box-sizing: border-box;
+}
+
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a2a3a 0%, #0d1520 100%);
+  padding: 24px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+header h2 {
+  margin: 0;
+  color: #ffffff;
+}
+
+.subtitle {
+  margin: 4px 0 0 0;
+  color: #8a9bb0;
+  font-size: 13px;
+}
+
+.card {
+  background: #1f3346;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2a4059;
+}
+
+.card h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #e8edf2;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.form-row input {
+  flex: 1;
+  min-width: 180px;
+  padding: 11px 14px;
+  border: 1px solid #2a4059;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #14202e;
+  color: #e8edf2;
+}
+
+.form-row input::placeholder {
+  color: #6b7f94;
+}
+
+.form-row input:focus {
+  outline: none;
+  border-color: #25d366;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primario {
+  background: #25d366;
+  color: white;
+  padding: 11px 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.btn-primario:hover:not(:disabled) {
+  background: #1eb856;
+}
+
+.btn-secundario {
+  background: #3a1f1f;
+  color: #ff6b6b;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.btn-secundario:hover:not(:disabled) {
+  background: #4a2828;
+}
+
+.error {
+  background: #3a1f1f;
+  color: #ff6b6b;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin: 12px 0 0 0;
+  border: 1px solid #5a2e2e;
+}
+
+.tabla-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #8a9bb0;
+  border-bottom: 2px solid #2a4059;
+}
+
+tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #253c52;
+  font-size: 14px;
+  color: #e8edf2;
+}
+
+tbody tr:hover {
+  background: #223850;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.activo {
+  background: #163d24;
+  color: #4ade80;
+}
+
+.badge.pausado {
+  background: #3a1f1f;
+  color: #ff6b6b;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-toggle {
+  background: #1e2a4a;
+  color: #7c9bff;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.btn-toggle:hover:not(:disabled) {
+  background: #283a63;
+}
+
+.btn-eliminar {
+  background: #3a1f1f;
+  color: #ff6b6b;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.btn-eliminar:hover:not(:disabled) {
+  background: #4a2828;
+}
+
+.vacio {
+  text-align: center;
+  color: #6b7f94;
+  padding: 24px 0;
+}
+
+.loading-overlay {
+  text-align: center;
+  padding: 30px 0;
+  color: #8a9bb0;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+.spinner.grande {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #2a4059;
+  border-top-color: #25d366;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 700px) {
+  thead {
+    display: none;
+  }
+
+  table, tbody, tr, td {
+    display: block;
+    width: 100%;
+  }
+
+  tbody tr {
+    margin-bottom: 12px;
+    border: 1px solid #2a4059;
+    border-radius: 10px;
+    padding: 8px;
+  }
+
+  tbody td {
+    border: none;
+    padding: 8px 12px;
+    position: relative;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #6b7f94;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-row input,
+  .form-row button {
+    width: 100%;
+  }
+}

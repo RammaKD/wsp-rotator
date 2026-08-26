@@ -1,1 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --panel-surface: #1f3346;
+}
+
+.swal2-popup {
+  background: var(--panel-surface);
+  color: #e8edf2;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}

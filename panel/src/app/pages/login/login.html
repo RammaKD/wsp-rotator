@@ -1,6 +1,7 @@
 <div class="login-container">
-  <form (ngSubmit)="onSubmit()">
+  <form class="login-card" (ngSubmit)="onSubmit()">
     <h2>Panel de administración</h2>
+    <p class="subtitle">Rotador de WhatsApp</p>
 
     <div class="campo">
       <label for="email">Email</label>
@@ -10,6 +11,7 @@
         name="email"
         [(ngModel)]="email"
         required
+        [disabled]="cargando()"
       />
     </div>
 
@@ -21,12 +23,14 @@
         name="password"
         [(ngModel)]="password"
         required
+        [disabled]="cargando()"
       />
     </div>
 
     <p class="error" *ngIf="errorMsg()">{{ errorMsg() }}</p>
 
     <button type="submit" [disabled]="cargando()">
+      <span *ngIf="cargando()" class="spinner"></span>
       {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
     </button>
   </form>

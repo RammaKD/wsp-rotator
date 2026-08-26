@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 import { SupabaseService } from '../../services/supabase';
 
 interface WhatsappNumber {
@@ -40,7 +41,7 @@ export class DashboardComponent implements OnInit {
     const { data, error } = await this.supabaseService.getNumeros();
 
     if (error) {
-      this.errorMsg.set('Error al cargar los números');
+      Swal.fire('Error', 'No se pudieron cargar los números', 'error');
     } else {
       this.numeros.set(data as WhatsappNumber[]);
     }
@@ -53,28 +54,23 @@ export class DashboardComponent implements OnInit {
     const nombreLimpio = this.nuevoNombre.trim();
     const numeroLimpio = this.nuevoNumero.trim().replace(/\D/g, '');
 
-    // Validación: nombre vacío
     if (!nombreLimpio) {
       this.errorMsg.set('El nombre no puede estar vacío');
       return;
     }
 
-    // Validación: número vacío después de limpiar
     if (!numeroLimpio) {
       this.errorMsg.set('Ingresá un número válido (solo números)');
       return;
     }
 
-    // Validación: longitud esperada (código de área + número, sin 54 ni 9)
-    // Números argentinos: entre 10 y 11 dígitos según el área (ej: 1136473783 = 10 dígitos)
     if (numeroLimpio.length < 10 || numeroLimpio.length > 11) {
-      this.errorMsg.set('El número debe tener 10 u 11 dígitos (sin 54 ni 9), ej: 1136473783');
+      this.errorMsg.set('El número debe tener 10 u 11 dígitos, ej: 1136473783');
       return;
     }
 
     const numeroCompleto = '549' + numeroLimpio;
 
-    // Validación: número duplicado
     const yaExiste = this.numeros().some(n => n.numero === numeroCompleto);
     if (yaExiste) {
       this.errorMsg.set('Ese número ya está cargado en la rotación');
@@ -93,26 +89,48 @@ export class DashboardComponent implements OnInit {
     );
 
     if (error) {
-      this.errorMsg.set('Error al guardar en la base de datos. Intentá de nuevo.');
+      Swal.fire('Error', 'No se pudo guardar el número', 'error');
     } else {
       this.nuevoNumero = '';
       this.nuevoNombre = '';
       await this.cargarNumeros();
+      Swal.fire({
+        icon: 'success',
+        title: 'Número agregado',
+        timer: 1200,
+        showConfirmButton: false
+      });
     }
     this.cargando.set(false);
   }
 
   async eliminarNumero(id: string) {
-    const confirmar = confirm('¿Seguro que querés eliminar este número de la rotación?');
-    if (!confirmar) return;
+    const resultado = await Swal.fire({
+      title: '¿Eliminar número?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6'
+    });
+
+    if (!resultado.isConfirmed) return;
 
     this.cargando.set(true);
     const { error } = await this.supabaseService.eliminarNumero(id);
 
     if (error) {
-      this.errorMsg.set('Error al eliminar el número');
+      Swal.fire('Error', 'No se pudo eliminar el número', 'error');
     } else {
       await this.cargarNumeros();
+      Swal.fire({
+        icon: 'success',
+        title: 'Eliminado',
+        timer: 1000,
+        showConfirmButton: false
+      });
     }
     this.cargando.set(false);
   }
@@ -122,7 +140,7 @@ export class DashboardComponent implements OnInit {
     const { error } = await this.supabaseService.actualizarNumero(numero.id, { activo: !numero.activo });
 
     if (error) {
-      this.errorMsg.set('Error al actualizar el número');
+      Swal.fire('Error', 'No se pudo actualizar el número', 'error');
     } else {
       await this.cargarNumeros();
     }
