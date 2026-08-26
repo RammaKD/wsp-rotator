@@ -65,6 +65,33 @@ export class SupabaseService {
       .from('whatsapp_numbers')
       .delete()
       .eq('id', id);
-    return { data, error };
+
+    if (error) {
+      return { data, error };
+    }
+
+    const { data: numeros, error: errorConsulta } = await this.supabase
+      .from('whatsapp_numbers')
+      .select('id, orden')
+      .order('orden', { ascending: true });
+
+    if (errorConsulta) {
+      return { data, error: errorConsulta };
+    }
+
+    const actualizaciones = (numeros ?? [])
+      .map((numero, indice) => ({ id: numero.id, orden: indice + 1 }))
+      .filter((numero, indice) => numero.orden !== numeros[indice].orden)
+      .map(({ id, orden }) =>
+        this.supabase
+          .from('whatsapp_numbers')
+          .update({ orden })
+          .eq('id', id)
+      );
+
+    const resultados = await Promise.all(actualizaciones);
+    const errorReordenando = resultados.find(resultado => resultado.error)?.error;
+
+    return { data, error: errorReordenando ?? null };
   }
 }
