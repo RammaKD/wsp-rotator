@@ -1,0 +1,33 @@
+<div class="login-container">
+  <form (ngSubmit)="onSubmit()">
+    <h2>Panel de administración</h2>
+
+    <div class="campo">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        required
+      />
+    </div>
+
+    <div class="campo">
+      <label for="password">Contraseña</label>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        required
+      />
+    </div>
+
+    <p class="error" *ngIf="errorMsg()">{{ errorMsg() }}</p>
+
+    <button type="submit" [disabled]="cargando()">
+      {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+  </form>
+</div>

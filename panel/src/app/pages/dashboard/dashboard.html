@@ -1,0 +1,54 @@
+<div class="dashboard-container">
+  <header>
+    <h2>Panel de rotación de WhatsApp</h2>
+    <button (click)="logout()">Cerrar sesión</button>
+  </header>
+
+  <p class="error" *ngIf="errorMsg()">{{ errorMsg() }}</p>
+
+  <section class="agregar">
+    <input
+      type="text"
+      placeholder="Nombre (ej: Juan)"
+      [(ngModel)]="nuevoNombre"
+      [disabled]="cargando()"
+    />
+    <input
+      type="text"
+      placeholder="Número sin +54 ni 9 (ej: 1136473783)"
+      [(ngModel)]="nuevoNumero"
+      [disabled]="cargando()"
+    />
+    <button (click)="agregarNumero()" [disabled]="cargando()">Agregar</button>
+  </section>
+
+  <table>
+    <thead>
+    <tr>
+        <th>Orden</th>
+        <th>Nombre</th>
+        <th>Número</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let numero of numeros()">
+        <td>{{ numero.orden }}</td>
+        <td>{{ numero.nombre || '-' }}</td>
+        <td>{{ numero.numero }}</td>
+        <td>{{ numero.activo ? 'Activo' : 'Pausado' }}</td>
+        <td>
+          <button (click)="toggleActivo(numero)" [disabled]="cargando()">
+            {{ numero.activo ? 'Pausar' : 'Activar' }}
+          </button>
+          <button (click)="eliminarNumero(numero.id)" [disabled]="cargando()">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="numeros().length === 0 && !cargando()">No hay números cargados todavía.</p>
+</div>
