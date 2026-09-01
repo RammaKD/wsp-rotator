@@ -18,9 +18,38 @@ header {
   gap: 12px;
 }
 
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 header h2 {
   margin: 0;
   color: #ffffff;
+  font-size: clamp(1.1rem, 2vw, 1.8rem);
+  line-height: 1.2;
 }
 
 .subtitle {
@@ -166,10 +195,26 @@ tbody tr:hover {
   color: #ff6b6b;
 }
 
+.stats-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.total-clicks {
+  margin: 0;
+}
+
+.stats-reset-btn {
+  margin-top: 0;
+}
+
 .acciones {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .btn-toggle {
@@ -192,6 +237,17 @@ tbody tr:hover {
 
 .btn-eliminar:hover:not(:disabled) {
   background: #4a2828;
+}
+
+.btn-reset {
+  background: #1e2a4a;
+  color: #7c9bff;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.btn-reset:hover:not(:disabled) {
+  background: #283a63;
 }
 
 .vacio {
@@ -228,6 +284,27 @@ tbody tr:hover {
 }
 
 @media (max-width: 700px) {
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  header h2 {
+    font-size: 1.05rem;
+  }
+
+  .subtitle {
+    font-size: 11px;
+  }
+
   thead {
     display: none;
   }
@@ -260,6 +337,13 @@ tbody tr:hover {
     margin-bottom: 2px;
   }
 
+  td[data-label="Estado"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
   .form-row {
     flex-direction: column;
   }
@@ -267,5 +351,87 @@ tbody tr:hover {
   .form-row input,
   .form-row button {
     width: 100%;
+  }
+
+  .acciones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 8px;
+  }
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.total-clicks {
+  color: #e8edf2;
+  font-size: 15px;
+  margin: 0;
+}
+
+.total-clicks strong {
+  color: #25d366;
+  font-size: 20px;
+}
+
+.card p {
+  color: #e8edf2;
+  margin: 0 0 12px 0;
+}
+
+.ultimo-numero-card {
+  border: 1px solid rgba(37, 211, 102, 0.3);
+}
+
+.ultimo-numero-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.ultimo-numero-content > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(20, 32, 46, 0.9);
+  border: 1px solid #2a4059;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.ultimo-numero-content strong {
+  color: #ffffff;
+}
+
+.label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a9bb0;
+}
+
+.sin-ultimo {
+  margin-top: 8px;
+}
+
+tbody tr {
+  transition: background 0.15s ease;
+}
+
+.btn-espaciado {
+  margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+  .ultimo-numero-content {
+    grid-template-columns: 1fr;
   }
 }

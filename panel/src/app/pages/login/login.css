@@ -15,10 +15,23 @@
 .login-card {
   background: var(--panel-surface);
   border-radius: 16px;
-  padding: 40px 32px;
+  padding: 24px 32px 28px;
   width: 100%;
   max-width: 380px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.brand-login {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.brand-login-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  display: block;
 }
 
 .login-card h2 {
@@ -84,6 +97,7 @@
 button {
   width: 100%;
   padding: 13px;
+  margin-top: 8px;
   background: #25d366;
   color: white;
   border: none;

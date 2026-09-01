@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
+  private realtimeChannel: ReturnType<SupabaseClient['channel']> | null = null;
 
   constructor() {
     this.supabase = createClient(
@@ -93,5 +94,124 @@ export class SupabaseService {
     const errorReordenando = resultados.find(resultado => resultado.error)?.error;
 
     return { data, error: errorReordenando ?? null };
+  }
+
+  // ---------- CONFIGURACIÓN (mensaje global) ----------
+  async getConfig() {
+    const { data, error } = await this.supabase
+      .from('app_config')
+      .select('*')
+      .eq('id', 1)
+      .single();
+    return { data, error };
+  }
+
+  async getRotatorState() {
+    const { data, error } = await this.supabase
+      .from('rotator_state')
+      .select('*')
+      .limit(1)
+      .maybeSingle();
+
+    return { data, error };
+  }
+
+  async getUltimoNumeroUsado() {
+    const { data, error } = await this.supabase
+      .from('rotator_state')
+      .select('*')
+      .limit(1)
+      .maybeSingle();
+
+    if (error || !data) {
+      return { data: null, error };
+    }
+
+    const numeroUsado = data.ultimo_numero ?? data.last_number ?? data.numero ?? null;
+    const nombreUsado = data.ultimo_numero_nombre ?? data.last_number_name ?? data.nombre ?? 'Sin nombre';
+    const ordenUsado = data.ultimo_orden ?? data.last_order ?? data.orden ?? null;
+
+    if (!numeroUsado) {
+      return { data: null, error: null };
+    }
+
+    return {
+      data: {
+        numero: numeroUsado,
+        nombre: nombreUsado,
+        orden: ordenUsado
+      },
+      error: null
+    };
+  }
+
+  async actualizarUltimoNumero(numero: string, nombre?: string) {
+    const payload: Record<string, string | number | null> = {
+      ultimo_numero: numero,
+      ultimo_numero_nombre: nombre || null
+    };
+
+    const { data, error } = await this.supabase
+      .from('rotator_state')
+      .update(payload)
+      .eq('id', 1);
+
+    return { data, error };
+  }
+
+  async actualizarMensaje(mensaje: string) {
+    const { data, error } = await this.supabase
+      .from('app_config')
+      .update({ mensaje_default: mensaje })
+      .eq('id', 1);
+    return { data, error };
+  }
+
+  // ---------- ESTADÍSTICAS ----------
+  async resetearClicks() {
+    const { data, error } = await this.supabase
+      .from('whatsapp_numbers')
+      .update({ clicks: 0 })
+      .not('id', 'is', null);
+
+    return { data, error };
+  }
+
+  async resetearClicksNumero(id: string) {
+    const { data, error } = await this.supabase
+      .from('whatsapp_numbers')
+      .update({ clicks: 0 })
+      .eq('id', id);
+
+    return { data, error };
+  }
+
+  subscribeToDashboardChanges(onChange: () => void) {
+    if (this.realtimeChannel) {
+      return;
+    }
+
+    this.realtimeChannel = this.supabase.channel('dashboard-realtime');
+
+    this.realtimeChannel
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'whatsapp_numbers' },
+        () => onChange())
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'app_config' },
+        () => onChange())
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'rotator_state' },
+        () => onChange())
+      .subscribe();
+  }
+
+  unsubscribeDashboardChanges() {
+    if (!this.realtimeChannel) {
+      return;
+    }
+
+    this.supabase.removeChannel(this.realtimeChannel);
+    this.realtimeChannel = null;
   }
 }
